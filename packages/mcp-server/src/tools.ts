@@ -593,6 +593,30 @@ export function createToolDefinitions(client: PaperclipApiClient): ToolDefinitio
         }),
     ),
     makeTool(
+      "paperclipArchiveIssue",
+      "Archive an issue to remove it from the default inbox view (does not change the issue's status)",
+      z.object({
+        issueId: issueIdSchema,
+        userId: z.string().optional().nullable(),
+      }),
+      async ({ issueId, userId }) => {
+        const body = userId ? { userId } : {};
+        return client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/inbox-archive`, { body });
+      },
+    ),
+    makeTool(
+      "paperclipUnarchiveIssue",
+      "Unarchive an issue to restore it to the default inbox view",
+      z.object({
+        issueId: issueIdSchema,
+        userId: z.string().optional().nullable(),
+      }),
+      async ({ issueId, userId }) => {
+        const body = userId ? { userId } : {};
+        return client.requestJson("DELETE", `/issues/${encodeURIComponent(issueId)}/inbox-archive`, { body });
+      },
+    ),
+    makeTool(
       "paperclipApiRequest",
       "Make a JSON request to an existing Paperclip /api endpoint for unsupported operations",
       apiRequestSchema,
