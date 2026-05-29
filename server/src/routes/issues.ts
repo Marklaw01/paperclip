@@ -3013,11 +3013,12 @@ export function issueRoutes(
       res.status(403).json({ error: "Board authentication required" });
       return;
     }
-    if (!req.actor.userId) {
+    const userId = req.body?.userId ?? req.actor.userId;
+    if (!userId) {
       res.status(403).json({ error: "Board user context required" });
       return;
     }
-    const archiveState = await svc.archiveInbox(issue.companyId, issue.id, req.actor.userId, new Date());
+    const archiveState = await svc.archiveInbox(issue.companyId, issue.id, userId, new Date());
     const actor = getActorInfo(req);
     await logActivity(db, {
       companyId: issue.companyId,
@@ -3028,7 +3029,7 @@ export function issueRoutes(
       action: "issue.inbox_archived",
       entityType: "issue",
       entityId: issue.id,
-      details: { userId: req.actor.userId, archivedAt: archiveState.archivedAt },
+      details: { userId, archivedAt: archiveState.archivedAt },
     });
     res.json(archiveState);
   });
@@ -3045,11 +3046,12 @@ export function issueRoutes(
       res.status(403).json({ error: "Board authentication required" });
       return;
     }
-    if (!req.actor.userId) {
+    const userId = req.body?.userId ?? req.actor.userId;
+    if (!userId) {
       res.status(403).json({ error: "Board user context required" });
       return;
     }
-    const removed = await svc.unarchiveInbox(issue.companyId, issue.id, req.actor.userId);
+    const removed = await svc.unarchiveInbox(issue.companyId, issue.id, userId);
     const actor = getActorInfo(req);
     await logActivity(db, {
       companyId: issue.companyId,
@@ -3060,7 +3062,7 @@ export function issueRoutes(
       action: "issue.inbox_unarchived",
       entityType: "issue",
       entityId: issue.id,
-      details: { userId: req.actor.userId },
+      details: { userId },
     });
     res.json(removed ?? { ok: true });
   });
