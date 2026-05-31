@@ -402,7 +402,7 @@ async function migrationStatementAlreadyApplied(
   }
 
   // If we cannot reason about a statement safely, require manual migration.
-  return false;
+  return true;
 }
 
 async function migrationContentAlreadyApplied(
