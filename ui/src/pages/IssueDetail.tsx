@@ -2613,6 +2613,7 @@ export function IssueDetail() {
   ]);
 
   const isFromInbox = resolvedIssueDetailState?.issueDetailSource === "inbox";
+  const isInInbox = !!issue?.myLastTouchAt;
 
   // Scroll to top on forward navigation (PUSH/REPLACE) so issue doesn't
   // inherit the inbox/issues-list scroll position on mobile.
@@ -2679,6 +2680,7 @@ export function IssueDetail() {
   const goToInboxShortcutTimeoutRef = useRef<number | null>(null);
   const canQuickArchiveFromInbox =
     keyboardShortcutsEnabled &&
+    isInInbox &&
     !issue?.hiddenAt;
 
   useEffect(() => {
@@ -2887,7 +2889,7 @@ export function IssueDetail() {
   const showInboxToolbar = isMobile && isFromInbox;
   const archivePending = archiveFromInbox.isPending;
   const issueHidden = !!issue?.hiddenAt;
-  const canArchiveFromInbox = isFromInbox && !!issue?.id && !issueHidden;
+  const canArchiveFromInbox = isInInbox && !!issue?.id && !issueHidden;
 
   useEffect(() => {
     if (!showInboxToolbar) {
