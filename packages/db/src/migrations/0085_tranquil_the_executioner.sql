@@ -6,3 +6,4 @@ DO $$ BEGIN
 		ALTER TABLE "documents" ADD CONSTRAINT "documents_locked_by_agent_id_agents_id_fk" FOREIGN KEY ("locked_by_agent_id") REFERENCES "public"."agents"("id") ON DELETE set null ON UPDATE no action;
 	END IF;
 END $$;
+

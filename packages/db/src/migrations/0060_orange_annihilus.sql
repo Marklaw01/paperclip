@@ -48,3 +48,4 @@ WHERE "id" IN (
 DROP INDEX IF EXISTS "issue_reference_mentions_company_source_mention_uq";--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "issue_reference_mentions_company_source_mention_record_uq" ON "issue_reference_mentions" USING btree ("company_id","source_issue_id","target_issue_id","source_kind","source_record_id") WHERE "source_record_id" IS NOT NULL;--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "issue_reference_mentions_company_source_mention_null_record_uq" ON "issue_reference_mentions" USING btree ("company_id","source_issue_id","target_issue_id","source_kind") WHERE "source_record_id" IS NULL;
+

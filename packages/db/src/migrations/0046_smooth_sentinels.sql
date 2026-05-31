@@ -9,3 +9,4 @@ SET
 FROM "documents" AS "d"
 WHERE "d"."id" = "dr"."document_id";--> statement-breakpoint
 ALTER TABLE "document_revisions" ALTER COLUMN "format" SET NOT NULL;
+

@@ -16,3 +16,4 @@ END $$;--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "inbox_dismissals_company_user_idx" ON "inbox_dismissals" USING btree ("company_id","user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "inbox_dismissals_company_item_idx" ON "inbox_dismissals" USING btree ("company_id","item_key");--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "inbox_dismissals_company_user_item_idx" ON "inbox_dismissals" USING btree ("company_id","user_id","item_key");
+

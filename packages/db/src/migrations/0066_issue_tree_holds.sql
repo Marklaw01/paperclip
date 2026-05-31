@@ -105,3 +105,4 @@ CREATE INDEX IF NOT EXISTS "issue_tree_holds_company_status_mode_idx" ON "issue_
 CREATE UNIQUE INDEX IF NOT EXISTS "issue_tree_hold_members_hold_issue_uq" ON "issue_tree_hold_members" USING btree ("hold_id","issue_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "issue_tree_hold_members_company_issue_idx" ON "issue_tree_hold_members" USING btree ("company_id","issue_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "issue_tree_hold_members_hold_depth_idx" ON "issue_tree_hold_members" USING btree ("hold_id","depth");
+

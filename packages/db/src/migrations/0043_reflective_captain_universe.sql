@@ -4,3 +4,4 @@ CREATE UNIQUE INDEX IF NOT EXISTS "issues_open_routine_execution_uq" ON "issues"
           and "issues"."hidden_at" is null
           and "issues"."execution_run_id" is not null
           and "issues"."status" in ('backlog', 'todo', 'in_progress', 'in_review', 'blocked');
+

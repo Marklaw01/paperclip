@@ -63,3 +63,4 @@ CREATE INDEX IF NOT EXISTS "issue_thread_interactions_company_issue_created_at_i
 CREATE INDEX IF NOT EXISTS "issue_thread_interactions_company_issue_status_idx" ON "issue_thread_interactions" USING btree ("company_id","issue_id","status");
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "issue_thread_interactions_source_comment_idx" ON "issue_thread_interactions" USING btree ("source_comment_id");
+

@@ -39,3 +39,4 @@ CREATE INDEX IF NOT EXISTS "plugin_database_namespaces_status_idx" ON "plugin_da
 CREATE UNIQUE INDEX IF NOT EXISTS "plugin_migrations_plugin_key_idx" ON "plugin_migrations" USING btree ("plugin_id","migration_key");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "plugin_migrations_plugin_idx" ON "plugin_migrations" USING btree ("plugin_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "plugin_migrations_status_idx" ON "plugin_migrations" USING btree ("status");
+

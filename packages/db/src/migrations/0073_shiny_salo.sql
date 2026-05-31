@@ -1,1 +1,2 @@
-ALTER TABLE "companies" ADD COLUMN "attachment_max_bytes" integer DEFAULT 10485760 NOT NULL;
+ALTER TABLE "companies" ADD COLUMN IF NOT EXISTS "attachment_max_bytes" integer DEFAULT 10485760 NOT NULL;
+

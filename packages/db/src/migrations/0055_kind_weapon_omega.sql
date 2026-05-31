@@ -1,1 +1,2 @@
-ALTER TABLE "heartbeat_runs" ADD COLUMN "process_group_id" integer;--> statement-breakpoint
+ALTER TABLE "heartbeat_runs" ADD COLUMN IF NOT EXISTS "process_group_id" integer;--> statement-breakpoint
+

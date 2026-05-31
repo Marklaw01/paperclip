@@ -1,10 +1,10 @@
 -- Add issue identifier columns to companies
-ALTER TABLE "companies" ADD COLUMN "issue_prefix" text NOT NULL DEFAULT 'PAP';--> statement-breakpoint
-ALTER TABLE "companies" ADD COLUMN "issue_counter" integer NOT NULL DEFAULT 0;--> statement-breakpoint
+ALTER TABLE "companies" ADD COLUMN IF NOT EXISTS "issue_prefix" text NOT NULL DEFAULT 'PAP';--> statement-breakpoint
+ALTER TABLE "companies" ADD COLUMN IF NOT EXISTS "issue_counter" integer NOT NULL DEFAULT 0;--> statement-breakpoint
 
 -- Add issue identifier columns to issues
-ALTER TABLE "issues" ADD COLUMN "issue_number" integer;--> statement-breakpoint
-ALTER TABLE "issues" ADD COLUMN "identifier" text;--> statement-breakpoint
+ALTER TABLE "issues" ADD COLUMN IF NOT EXISTS "issue_number" integer;--> statement-breakpoint
+ALTER TABLE "issues" ADD COLUMN IF NOT EXISTS "identifier" text;--> statement-breakpoint
 
 -- Backfill existing issues: assign sequential issue_number per company ordered by created_at
 WITH numbered AS (
@@ -24,5 +24,6 @@ SET issue_counter = COALESCE(
   0
 );--> statement-breakpoint
 
--- Create unique index on (company_id, identifier)
-CREATE UNIQUE INDEX "issues_company_identifier_idx" ON "issues" USING btree ("company_id","identifier");
+-- CREATE UNIQUE INDEX IF NOT EXISTS on (company_id, identifier)
+CREATE UNIQUE INDEX IF NOT EXISTS "issues_company_identifier_idx" ON "issues" USING btree ("company_id","identifier");
+

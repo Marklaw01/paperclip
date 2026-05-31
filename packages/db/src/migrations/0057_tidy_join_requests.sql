@@ -55,3 +55,4 @@ ON "join_requests" USING btree ("company_id", lower("request_email_snapshot"))
 WHERE "request_type" = 'human'
   AND "status" = 'pending_approval'
   AND "request_email_snapshot" IS NOT NULL;
+

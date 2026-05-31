@@ -138,3 +138,4 @@ FROM "routine_revisions" rr
 WHERE rr."routine_id" = r."id"
 	AND rr."revision_number" = 1
 	AND r."latest_revision_id" IS NULL;
+

@@ -54,3 +54,4 @@ CREATE INDEX IF NOT EXISTS "board_api_keys_user_idx" ON "board_api_keys" USING b
 CREATE INDEX IF NOT EXISTS "cli_auth_challenges_secret_hash_idx" ON "cli_auth_challenges" USING btree ("secret_hash");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "cli_auth_challenges_approved_by_idx" ON "cli_auth_challenges" USING btree ("approved_by_user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "cli_auth_challenges_requested_company_idx" ON "cli_auth_challenges" USING btree ("requested_company_id");
+

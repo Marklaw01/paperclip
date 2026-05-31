@@ -49,3 +49,4 @@ CREATE INDEX IF NOT EXISTS "company_secret_provider_configs_company_provider_idx
 CREATE UNIQUE INDEX IF NOT EXISTS "company_secret_provider_configs_default_uq" ON "company_secret_provider_configs" USING btree ("company_id","provider") WHERE "is_default" = true;
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "company_secrets_provider_config_idx" ON "company_secrets" USING btree ("provider_config_id");
+

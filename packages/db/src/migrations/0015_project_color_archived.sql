@@ -1,2 +1,3 @@
-ALTER TABLE "projects" ADD COLUMN "color" text;
-ALTER TABLE "projects" ADD COLUMN "archived_at" timestamp with time zone;
+ALTER TABLE "projects" ADD COLUMN IF NOT EXISTS "color" text;
+ALTER TABLE "projects" ADD COLUMN IF NOT EXISTS "archived_at" timestamp with time zone;
+

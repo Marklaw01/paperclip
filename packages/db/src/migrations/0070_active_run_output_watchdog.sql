@@ -68,3 +68,4 @@ CREATE UNIQUE INDEX IF NOT EXISTS "issues_active_stale_run_evaluation_uq"
     AND "origin_id" IS NOT NULL
     AND "hidden_at" IS NULL
     AND "status" NOT IN ('done', 'cancelled');
+

@@ -24,3 +24,4 @@ DO $$ BEGIN
 END $$;--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "company_skills_company_key_idx" ON "company_skills" USING btree ("company_id","key");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "company_skills_company_name_idx" ON "company_skills" USING btree ("company_id","name");
+

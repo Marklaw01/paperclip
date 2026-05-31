@@ -159,3 +159,4 @@ CREATE INDEX IF NOT EXISTS "routines_company_status_idx" ON "routines" USING btr
 CREATE INDEX IF NOT EXISTS "routines_company_assignee_idx" ON "routines" USING btree ("company_id","assignee_agent_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "routines_company_project_idx" ON "routines" USING btree ("company_id","project_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "issues_company_origin_idx" ON "issues" USING btree ("company_id","origin_kind","origin_id");
+
