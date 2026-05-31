@@ -47,5 +47,5 @@ SET issue_counter = COALESCE((
   WHERE i.company_id = c.id
 ), 0);--> statement-breakpoint
 
-CREATE UNIQUE INDEX "companies_issue_prefix_idx" ON "companies" USING btree ("issue_prefix");--> statement-breakpoint
-CREATE UNIQUE INDEX "issues_identifier_idx" ON "issues" USING btree ("identifier");
+CREATE UNIQUE INDEX IF NOT EXISTS "companies_issue_prefix_idx" ON "companies" USING btree ("issue_prefix");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "issues_identifier_idx" ON "issues" USING btree ("identifier");

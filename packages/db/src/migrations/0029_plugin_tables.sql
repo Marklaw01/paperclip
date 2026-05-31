@@ -31,7 +31,7 @@
 --   DROP TABLE IF EXISTS "plugin_config";
 --   DROP TABLE IF EXISTS "plugins";
 
-CREATE TABLE "plugins" (
+CREATE TABLE IF NOT EXISTS "plugins" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_key" text NOT NULL,
 	"package_name" text NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE "plugins" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_config" (
+CREATE TABLE IF NOT EXISTS "plugin_config" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_id" uuid NOT NULL,
 	"config_json" jsonb DEFAULT '{}'::jsonb NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE "plugin_config" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_state" (
+CREATE TABLE IF NOT EXISTS "plugin_state" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_id" uuid NOT NULL,
 	"scope_kind" text NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE "plugin_state" (
 	CONSTRAINT "plugin_state_unique_entry_idx" UNIQUE NULLS NOT DISTINCT("plugin_id","scope_kind","scope_id","namespace","state_key")
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_entities" (
+CREATE TABLE IF NOT EXISTS "plugin_entities" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_id" uuid NOT NULL,
 	"entity_type" text NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE "plugin_entities" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_jobs" (
+CREATE TABLE IF NOT EXISTS "plugin_jobs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_id" uuid NOT NULL,
 	"job_key" text NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE "plugin_jobs" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_job_runs" (
+CREATE TABLE IF NOT EXISTS "plugin_job_runs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"job_id" uuid NOT NULL,
 	"plugin_id" uuid NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE "plugin_job_runs" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_webhook_deliveries" (
+CREATE TABLE IF NOT EXISTS "plugin_webhook_deliveries" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"plugin_id" uuid NOT NULL,
 	"webhook_key" text NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE "plugin_webhook_deliveries" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_company_settings" (
+CREATE TABLE IF NOT EXISTS "plugin_company_settings" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"company_id" uuid NOT NULL,
 	"plugin_id" uuid NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE "plugin_company_settings" (
 	"enabled" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "plugin_logs" (
+CREATE TABLE IF NOT EXISTS "plugin_logs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 	"plugin_id" uuid NOT NULL,
 	"level" text NOT NULL DEFAULT 'info',
@@ -153,25 +153,25 @@ ALTER TABLE "plugin_webhook_deliveries" ADD CONSTRAINT "plugin_webhook_deliverie
 ALTER TABLE "plugin_company_settings" ADD CONSTRAINT "plugin_company_settings_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "plugin_company_settings" ADD CONSTRAINT "plugin_company_settings_plugin_id_plugins_id_fk" FOREIGN KEY ("plugin_id") REFERENCES "public"."plugins"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "plugin_logs" ADD CONSTRAINT "plugin_logs_plugin_id_plugins_id_fk" FOREIGN KEY ("plugin_id") REFERENCES "public"."plugins"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE UNIQUE INDEX "plugins_plugin_key_idx" ON "plugins" USING btree ("plugin_key");--> statement-breakpoint
-CREATE INDEX "plugins_status_idx" ON "plugins" USING btree ("status");--> statement-breakpoint
-CREATE UNIQUE INDEX "plugin_config_plugin_id_idx" ON "plugin_config" USING btree ("plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_state_plugin_scope_idx" ON "plugin_state" USING btree ("plugin_id","scope_kind");--> statement-breakpoint
-CREATE INDEX "plugin_entities_plugin_idx" ON "plugin_entities" USING btree ("plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_entities_type_idx" ON "plugin_entities" USING btree ("entity_type");--> statement-breakpoint
-CREATE INDEX "plugin_entities_scope_idx" ON "plugin_entities" USING btree ("scope_kind","scope_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "plugin_entities_external_idx" ON "plugin_entities" USING btree ("plugin_id","entity_type","external_id");--> statement-breakpoint
-CREATE INDEX "plugin_jobs_plugin_idx" ON "plugin_jobs" USING btree ("plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_jobs_next_run_idx" ON "plugin_jobs" USING btree ("next_run_at");--> statement-breakpoint
-CREATE UNIQUE INDEX "plugin_jobs_unique_idx" ON "plugin_jobs" USING btree ("plugin_id","job_key");--> statement-breakpoint
-CREATE INDEX "plugin_job_runs_job_idx" ON "plugin_job_runs" USING btree ("job_id");--> statement-breakpoint
-CREATE INDEX "plugin_job_runs_plugin_idx" ON "plugin_job_runs" USING btree ("plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_job_runs_status_idx" ON "plugin_job_runs" USING btree ("status");--> statement-breakpoint
-CREATE INDEX "plugin_webhook_deliveries_plugin_idx" ON "plugin_webhook_deliveries" USING btree ("plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_webhook_deliveries_status_idx" ON "plugin_webhook_deliveries" USING btree ("status");--> statement-breakpoint
-CREATE INDEX "plugin_webhook_deliveries_key_idx" ON "plugin_webhook_deliveries" USING btree ("webhook_key");--> statement-breakpoint
-CREATE INDEX "plugin_company_settings_company_idx" ON "plugin_company_settings" USING btree ("company_id");--> statement-breakpoint
-CREATE INDEX "plugin_company_settings_plugin_idx" ON "plugin_company_settings" USING btree ("plugin_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "plugin_company_settings_company_plugin_uq" ON "plugin_company_settings" USING btree ("company_id","plugin_id");--> statement-breakpoint
-CREATE INDEX "plugin_logs_plugin_time_idx" ON "plugin_logs" USING btree ("plugin_id","created_at");--> statement-breakpoint
-CREATE INDEX "plugin_logs_level_idx" ON "plugin_logs" USING btree ("level");
+CREATE UNIQUE INDEX IF NOT EXISTS "plugins_plugin_key_idx" ON "plugins" USING btree ("plugin_key");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugins_status_idx" ON "plugins" USING btree ("status");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "plugin_config_plugin_id_idx" ON "plugin_config" USING btree ("plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_state_plugin_scope_idx" ON "plugin_state" USING btree ("plugin_id","scope_kind");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_entities_plugin_idx" ON "plugin_entities" USING btree ("plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_entities_type_idx" ON "plugin_entities" USING btree ("entity_type");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_entities_scope_idx" ON "plugin_entities" USING btree ("scope_kind","scope_id");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "plugin_entities_external_idx" ON "plugin_entities" USING btree ("plugin_id","entity_type","external_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_jobs_plugin_idx" ON "plugin_jobs" USING btree ("plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_jobs_next_run_idx" ON "plugin_jobs" USING btree ("next_run_at");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "plugin_jobs_unique_idx" ON "plugin_jobs" USING btree ("plugin_id","job_key");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_job_runs_job_idx" ON "plugin_job_runs" USING btree ("job_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_job_runs_plugin_idx" ON "plugin_job_runs" USING btree ("plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_job_runs_status_idx" ON "plugin_job_runs" USING btree ("status");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_webhook_deliveries_plugin_idx" ON "plugin_webhook_deliveries" USING btree ("plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_webhook_deliveries_status_idx" ON "plugin_webhook_deliveries" USING btree ("status");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_webhook_deliveries_key_idx" ON "plugin_webhook_deliveries" USING btree ("webhook_key");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_company_settings_company_idx" ON "plugin_company_settings" USING btree ("company_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_company_settings_plugin_idx" ON "plugin_company_settings" USING btree ("plugin_id");--> statement-breakpoint
+CREATE UNIQUE INDEX IF NOT EXISTS "plugin_company_settings_company_plugin_uq" ON "plugin_company_settings" USING btree ("company_id","plugin_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_logs_plugin_time_idx" ON "plugin_logs" USING btree ("plugin_id","created_at");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "plugin_logs_level_idx" ON "plugin_logs" USING btree ("level");
